@@ -1,0 +1,31 @@
+{
+  "name": "mocha-cases",
+  "version": "0.1.0",
+  "description": "A tiny mocha test case runner. Suited for simple input to output validation tests.",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amobiz/mocha-cases.git"
+  },
+  "keywords": [
+    "mocha",
+    "test",
+    "cases",
+    "runner",
+    "json"
+  ],
+  "author": "Amobiz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/amobiz/mocha-cases/issues"
+  },
+  "homepage": "https://github.com/amobiz/mocha-cases#readme",
+  "dependencies": {
+    "chai": "^3.4.1",
+    "chai-as-promised": "^5.1.0",
+    "mocha": "^2.3.4"
+  }
+}
