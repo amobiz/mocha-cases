@@ -11,29 +11,42 @@ Chai.use(Promised);
  * A tiny mocha test case runner. Suited for simple input to output validation tests.
  *
  * @param testCases
- *   var testCases = [{
+ * @param runner
+ * @param options
+ *
+ *
+ * @sample
+ *
+ *   var test = require('mocha-cases');
+ *
+ *   var cases = [{
  *       title: 'should ...',
  *       value: 'input value for test',
  *       expected: 'expected output value',
  *       error: 'expected error',
- *       runner: function(value, options) {},	// specific runner for this case
- *       options: { description: 'options passed to runner for this case' },
- *       async: false,	// is this an async test? i.e. return promise?
- *       only: true,	// run this case only?
- *       skip: false	// skip this case?
+ *       runner: function(value, options) {},	// runner specific for this case
+ *       options: {},							// options specific for this case
+ *       async: false,							// is this an async test? i.e. returning a promise?
+ *       only: false,							// run this case only?
+ *       skip: false							// skip this case?
  *   }, {
  *       ...
  *   }];
- * @param runner
- *    function runner(value, options) {
- *    	  return testTarget(value);
- *    }
- * @param options
  *
+ *   var options = {
+ *		 async: false,							// default async option
+ * 	     prefix: ''								// prefix to test names
+ *   };
  *
- * Alternatives:
- * run-mocha-cases
- * https://www.npmjs.com/package/run-mocha-cases
+ *   function runner(value, options) {
+ *    	 return 'expected output value';
+ *   }
+ *
+ *   describe('module: mocha-cases', function () {
+ *	     describe('feature: cases', function () {
+ *		     test(cases, runner, options);
+ *		 });
+ *	 });
  *
  */
 function cases(testCases, runner, options) {
