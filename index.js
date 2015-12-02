@@ -102,8 +102,6 @@ function cases(testCases, runner, options) {
 		}
 	}
 
-
-
 	function get(value, name) {
 		var i, n, path, paths = name.split('.');
 		for (i = 0, n = paths.length; i < n; ++i) {
@@ -113,7 +111,7 @@ function cases(testCases, runner, options) {
 				return null;
 			}
 		}
-		return value;
+		return JSON.stringify(value);
 	}
 }
 
