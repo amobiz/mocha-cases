@@ -11,7 +11,7 @@ npm install --save-dev mocha-cases
 var test = require('mocha-cases');
 
 var cases = [{
-	name: 'should case 1 ...',
+	name: 'should {value} equal to {expected}',
 	value: 'input value for test',
 	expected: 'expected output value',
 	error: 'expected error',
@@ -46,6 +46,17 @@ describe('module: mocha-cases', function () {
  * [data-driven](https://www.npmjs.com/package/data-driven)
  * [run-mocha-cases](https://www.npmjs.com/package/run-mocha-cases)
  * [mocha-check](https://www.npmjs.com/package/mocha-check)
+
+## Change Logs
+
+* 2015/12/03 - 0.1.1
+
+  * Make runner optional, or can be defined either in global options or case options.
+  * Allow value interpolation in test name.
+
+* 2015/11/23 - 0.1.0
+
+  * First release.
 
 ## License
 MIT
