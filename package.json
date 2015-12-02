@@ -4,7 +4,7 @@
   "description": "A tiny mocha test case runner. Suited for simple input to output validation tests.",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "mocha ./tests.js"
   },
   "repository": {
     "type": "git",
