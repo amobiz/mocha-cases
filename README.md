@@ -43,6 +43,7 @@ describe('module: mocha-cases', function () {
 
 ## Alternatives
 
+ * [data-driven](https://www.npmjs.com/package/data-driven)
  * [run-mocha-cases](https://www.npmjs.com/package/run-mocha-cases)
  * [mocha-check](https://www.npmjs.com/package/mocha-check)
 
