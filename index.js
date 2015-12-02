@@ -20,7 +20,7 @@ Chai.use(Promised);
  *   var test = require('mocha-cases');
  *
  *   var cases = [{
- *       title: 'should ...',
+ *       name: 'should ...',
  *       value: 'input value for test',
  *       expected: 'expected output value',
  *       error: 'expected error',
@@ -55,17 +55,7 @@ function cases(testCases, runner, options) {
 	tests = filter(only) || filter(skip) || testCases;
 	options = options || {};
 	prefix = options.prefix || '';
-    tests.forEach(function (testCase) {
-        it(prefix + testCase.name, function () {
-            var to = (testCase.async || options.async) ? 'eventually' : 'to';
-			var run = testCase.runner || runner;
-            if (testCase.error) {
-                expect(function () { run(testCase.value, testCase.options); })[to].throw(testCase.error);
-            } else {
-                expect(run(testCase.value, testCase.options))[to].deep.equal(testCase.expected);
-            }
-        });
-    });
+    tests.forEach(runTest);
 
     function filter(fn) {
         var tests = testCases.filter(fn);
@@ -80,6 +70,18 @@ function cases(testCases, runner, options) {
 
     function skip(testCase) {
         return !testCase.skip;
+    }
+
+    function runTest(testCase) {
+        it(prefix + testCase.name, function () {
+            var to = (testCase.async || options.async) ? 'eventually' : 'to';
+            var run = testCase.runner || runner;
+            if (testCase.error) {
+                expect(function () { run(testCase.value, testCase.options); })[to].throw(testCase.error);
+            } else {
+                expect(run(testCase.value, testCase.options))[to].deep.equal(testCase.expected);
+            }
+        });
     }
 }
 
