@@ -56,6 +56,10 @@ function cases(testCases, runner, options) {
 	var prefix, tests, it;
 
 	tests = filter(only) || filter(skip) || testCases;
+	if (typeof runner !== 'function') {
+		options = runner;
+		runner = noop;
+	}
 	options = options || {};
 	it = options.it || _it;
 	prefix = options.prefix || '';
@@ -76,10 +80,13 @@ function cases(testCases, runner, options) {
 		return !testCase.skip;
 	}
 
+	function noop() {
+	}
+
 	function runTest(testCase) {
 		it(prefix + title(testCase), function () {
 			var to = (testCase.async || options.async) ? 'eventually' : 'to';
-			var run = testCase.runner || runner;
+			var run = testCase.runner || options.runner || runner;
 			if (testCase.error) {
 				expect(function () { run(testCase.value, testCase.options); })[to].throw(testCase.error);
 			} else {

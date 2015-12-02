@@ -63,7 +63,7 @@ describe('mocha-cases', function () {
 					});
 				}
 			};
-			test([testCase], function () {}, options);
+			test([testCase], options);
 		}
 	});
 });
