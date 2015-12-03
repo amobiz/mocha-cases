@@ -17,7 +17,7 @@ var cases = [{
 	value: { text: 'input value for test' },
 	expected: { text: 'expected output value' },
 	error: 'expected error',
-	runner: function(value, options) {},	// runner specific to this case
+	runner: function (value, options) {},	// runner specific to this case
 	options: {},							// options specific to this case
 	async: false,							// is this an async test? i.e. returning a promise?
 	only: false,							// run this case only?
