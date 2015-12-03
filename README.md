@@ -48,7 +48,7 @@ describe('module: mocha-cases', function () {
 describe('prime number', function () {
 	test({
 		name: 'given prime number {value}, isPrime() returns true',
-		values: [1, 2, 3, 5, 7, 11, 13],
+		values: [2, 3, 5, 7, 11, 13],
 		expected: true
 	}, isPrime);
 });
@@ -59,8 +59,8 @@ describe('prime number', function () {
 describe('prime number', function () {
 	test({
 		name: 'given prime number {value}, isPrime() returns true, false otherwise',
-		values:   [1,	 2,    3,    4,     5,    6,     7,    8,     9],
-		expected: [true, true, true, false, true, false, true, false, false],
+		values:   [2,    3,    4,     5,    6,     7,    8,     9],
+		expected: [true, true, false, true, false, true, false, false],
 		runner: isPrime
 	});
 });
@@ -74,7 +74,7 @@ describe('prime number', function () {
 
 ## Change Logs
 
-* 2015/12/03 - 0.1.2
+* 2015/12/03 - 0.1.3
 
   * Allow multiple values in one case using "values" keyword.
 
