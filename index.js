@@ -13,48 +13,15 @@ var INTERPOLATE = /{([\s\S]+?)}/g;
  * Run test runner using given test cases.
  * A tiny mocha test case runner. Suited for simple input to output validation tests.
  *
- * @param testCases
- * @param runner
- * @param options
- *
- *
- * @sample
- *
- *   var test = require('mocha-cases');
- *
- *   var cases = [{
- *       name: 'should ...',
- *       value: 'input value for test',
- *       expected: 'expected output value',
- *       error: 'expected error',
- *       runner: function(value, options) {},	// runner specific to this case
- *       options: {},							// options specific to this case
- *       async: false,							// is this an async test? i.e. returning a promise?
- *       only: false,							// run this case only?
- *       skip: false							// skip this case?
- *   }, {
- *       ...
- *   }];
- *
- *   var options = {
- *		 async: false,							// default async option
- * 	     prefix: ''								// prefix to test names
- *   };
- *
- *   function runner(value, options) {
- *    	 return 'expected output value';
- *   }
- *
- *   describe('module: mocha-cases', function () {
- *	     describe('feature: cases', function () {
- *		     test(cases, runner, options);
- *		 });
- *	 });
+ * @param testCases {array | object} the test case(s) to verify
+ * @param runner {function} optional, the test runner
+ * @param options {any} optional, extra value passed to runner
  *
  */
 function cases(testCases, runner, options) {
 	var prefix, tests, it;
 
+	testCases = Array.isArray(testCases) ? testCases : [testCases];
 	tests = filter(only) || filter(skip) || testCases;
 	if (typeof runner !== 'function') {
 		options = runner;
@@ -84,15 +51,32 @@ function cases(testCases, runner, options) {
 	}
 
 	function runTest(testCase) {
-		it(prefix + title(testCase), function () {
-			var to = (testCase.async || options.async) ? 'eventually' : 'to';
-			var run = testCase.runner || options.runner || runner;
-			if (testCase.error) {
-				expect(function () { run(testCase.value, testCase.options); })[to].throw(testCase.error);
-			} else {
-				expect(run(testCase.value, testCase.options))[to].deep.equal(testCase.expected);
+		var allexpected;
+		var to = (testCase.async || options.async) ? 'eventually' : 'to';
+		var run = testCase.runner || options.runner || runner;
+
+		if ('values' in testCase) {
+			if (Array.isArray(testCase.expected)) {
+				allexpected = testCase.expected;
 			}
-		});
+			testCase.values.forEach(function (value, i) {
+				var _title = title({
+					name: testCase.name,
+					value: value
+				});
+				it(prefix + _title, function () {
+					expect(run(value, testCase.options))[to].deep.equal(allexpected && allexpected[i] || testCase.expected);
+				});
+			});
+		} else {
+			it(prefix + title(testCase), function () {
+				if (testCase.error) {
+					expect(function () { run(testCase.value, testCase.options); })[to].throw(testCase.error);
+				} else if ('value' in testCase) {
+					expect(run(testCase.value, testCase.options))[to].deep.equal(testCase.expected);
+				}
+			});
+		}
 
 		function title(testCase) {
 			var template = testCase.name;
