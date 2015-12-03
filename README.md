@@ -45,9 +45,7 @@ describe('module: mocha-cases', function () {
 
 ### One case vs. multiple values vs. one expected
 ```
-var test = require('mocha-cases');
-
-describe('module: mocha-cases', function () {
+describe('prime number', function () {
 	test({
 		name: 'given prime number {value}, isPrime() returns true',
 		values: [1, 2, 3, 5, 7, 11, 13],
@@ -58,11 +56,9 @@ describe('module: mocha-cases', function () {
 
 ### One case vs. multiple values vs. multiple expected
 ```
-var test = require('mocha-cases');
-
-describe('module: mocha-cases', function () {
+describe('prime number', function () {
 	test({
-		name: 'given prime number {value}, isPrime() returns true, otherwise false',
+		name: 'given prime number {value}, isPrime() returns true, false otherwise',
 		values:   [1,	 2,    3,    4,     5,    6,     7,    8,     9],
 		expected: [true, true, true, false, true, false, true, false, false],
 		runner: isPrime
