@@ -74,6 +74,10 @@ describe('prime number', function () {
 
 ## Change Logs
 
+* 2015/12/07 - 0.1.4
+
+  * Move mocha from "dependencies" to "peerDependencies".
+
 * 2015/12/03 - 0.1.3
 
   * Allow multiple values in one case using "values" keyword.

@@ -1,6 +1,6 @@
 {
   "name": "mocha-cases",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "A tiny mocha test case runner. Suited for simple input to output validation tests.",
   "main": "index.js",
   "scripts": {
@@ -23,9 +23,11 @@
     "url": "https://github.com/amobiz/mocha-cases/issues"
   },
   "homepage": "https://github.com/amobiz/mocha-cases#readme",
+  "peerDependencies": {
+    "mocha": "^2.3.4"
+  },
   "dependencies": {
     "chai": "^3.4.1",
-    "chai-as-promised": "^5.1.0",
-    "mocha": "^2.3.4"
+    "chai-as-promised": "^5.1.0"
   }
 }
