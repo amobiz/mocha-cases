@@ -8,7 +8,37 @@ var Chai = require('chai'),
 var test = require('../');
 
 describe('mocha-cases', function () {
-	describe('value interpolate', function () {
+	describe('dealing with single test value', function () {
+		var cases = [{
+			name: 'should handle single expected value',
+			value: 7,
+			expected: 14,
+			runner: function (value) { return value * 2; }
+		}, {
+			name: 'should handle exception',
+			value: 'oops!',
+			error: Error,
+			runner: function (value) { if (value === 'oops!') throw new Error(value); }
+		}];
+
+		test(cases);
+	});
+	describe('dealing with miltiple test values', function () {
+		var cases = [{
+			name: 'should handle single expected value',
+			values: [2, 4, 6, 8, 10],
+			expected: 0,
+			runner: function (value) { return value % 2; }
+		}, {
+			name: 'should handle miltiple expected values',
+			values:   [3, 0, false, undefined, null, [], {}, ''],
+			expected: [3, 0, false, undefined, null, [], {}, ''],
+			runner: function echo(value) { return value; }
+		}];
+
+		test(cases);
+	});
+	describe('dealing value interpolating', function () {
 		var cases = [{
 			name: "should resolve top level value: {value}",
 			value: 520,

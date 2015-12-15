@@ -51,21 +51,19 @@ function cases(testCases, runner, options) {
 	}
 
 	function runTest(testCase) {
-		var allexpected;
+		var expected;
 		var to = (testCase.async || options.async) ? 'eventually' : 'to';
 		var run = testCase.runner || options.runner || runner;
 
 		if ('values' in testCase) {
-			if (Array.isArray(testCase.expected)) {
-				allexpected = testCase.expected;
-			}
+			expected = whichExpected(testCase.expected);
 			testCase.values.forEach(function (value, i) {
 				var _title = title({
 					name: testCase.name,
 					value: value
 				});
 				it(prefix + _title, function () {
-					expect(run(value, testCase.options))[to].deep.equal(allexpected && allexpected[i] || testCase.expected);
+					expect(run(value, testCase.options))[to].deep.equal(expected(i));
 				});
 			});
 		} else {
@@ -83,6 +81,17 @@ function cases(testCases, runner, options) {
 			return template.replace(INTERPOLATE, function (match, paths) {
 				return get(testCase, paths) || '{' + paths + '}';
 			});
+		}
+
+		function whichExpected(expected) {
+			if (Array.isArray(expected)) {
+				return function (index) {
+					return expected[index];
+				};
+			}
+			return function () {
+				return expected;
+			};
 		}
 	}
 
