@@ -5,7 +5,7 @@ var Chai = require('chai'),
 	expect = Chai.expect,
 	_it = it;
 
-var test = require('./');
+var test = require('../');
 
 describe('mocha-cases', function () {
 	describe('value interpolate', function () {

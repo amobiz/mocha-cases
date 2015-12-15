@@ -4,7 +4,7 @@
   "description": "A tiny mocha test case runner. Suited for simple input to output validation tests.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha ./tests.js"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -24,6 +24,9 @@
   },
   "homepage": "https://github.com/amobiz/mocha-cases#readme",
   "peerDependencies": {
+    "mocha": "^2.3.4"
+  },
+  "devDependencies": {
     "mocha": "^2.3.4"
   },
   "dependencies": {
