@@ -74,6 +74,10 @@ describe('prime number', function () {
 
 ## Change Logs
 
+* 2015/12/16 - 0.1.5
+
+  * Bug fix: fix error when expected values array contains falsy value.
+
 * 2015/12/07 - 0.1.4
 
   * Move mocha from "dependencies" to "peerDependencies".
