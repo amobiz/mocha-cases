@@ -66,6 +66,11 @@ describe('prime number', function () {
 });
 ```
 
+## Test
+``` bash
+$ npm test
+```
+
 ## Alternatives
 
  * [data-driven](https://www.npmjs.com/package/data-driven)
