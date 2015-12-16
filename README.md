@@ -2,14 +2,14 @@
 A tiny mocha test case runner. Suited for simple input to output validation tests.
 
 ## Install
-```
+``` bash
 npm install --save-dev mocha-cases
 ```
 
 ## Usage
 
 ### One case one value
-```
+``` javascript
 var test = require('mocha-cases');
 
 var cases = [{
@@ -44,7 +44,7 @@ describe('module: mocha-cases', function () {
 ```
 
 ### One case vs. multiple values vs. one expected
-```
+``` javascript
 describe('prime number', function () {
 	test({
 		name: 'given prime number {value}, isPrime() returns true',
@@ -55,7 +55,7 @@ describe('prime number', function () {
 ```
 
 ### One case vs. multiple values vs. multiple expected
-```
+``` javascript
 describe('prime number', function () {
 	test({
 		name: 'given prime number {value}, isPrime() returns true, false otherwise',
