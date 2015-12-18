@@ -1,41 +1,46 @@
 'use strict';
 
-var Chai = require('chai'),
-	Promised = require("chai-as-promised"),
-	expect = Chai.expect,
-	_it = it;
-
-Chai.use(Promised);
+var Chai = require('chai');
+var Promised = require('chai-as-promised');
+var expect = Chai.expect;
+var _it = it;
 
 var INTERPOLATE = /{([\s\S]+?)}/g;
+
+Chai.use(Promised);
 
 /**
  * Run test runner using given test cases.
  * A tiny mocha test case runner. Suited for simple input to output validation tests.
  *
  * @param testCases {array | object} the test case(s) to verify
- * @param runner {function} optional, the test runner
- * @param options {any} optional, extra value passed to runner
+ * @param optionalRunner {function} optional, the test runner
+ * @param optionalOptions {any} optional, extra value passed to runner
  *
  */
-function cases(testCases, runner, options) {
-	var prefix, tests, it;
+function cases(testCases, optionalRunner, optionalOptions) {
+	var it, options, prefix, runner, tests;
 
-	testCases = Array.isArray(testCases) ? testCases : [testCases];
-	tests = filter(only) || filter(skip) || testCases;
+	runner = optionalRunner || noop;
+	options = optionalOptions || {};
+
+	tests = Array.isArray(testCases) ? testCases : [testCases];
+	tests = filter(only) || filter(skip) || tests;
 	if (typeof runner !== 'function') {
 		options = runner;
 		runner = noop;
 	}
-	options = options || {};
+
 	it = options.it || _it;
 	prefix = options.prefix || '';
 	tests.forEach(runTest);
 
 	function filter(fn) {
-		var tests = testCases.filter(fn);
-		if (tests.length) {
-			return tests;
+		var filtered;
+
+		filtered = tests.filter(fn);
+		if (filtered.length) {
+			return filtered;
 		}
 	}
 
@@ -51,35 +56,37 @@ function cases(testCases, runner, options) {
 	}
 
 	function runTest(testCase) {
-		var expected;
 		var to = (testCase.async || options.async) ? 'eventually' : 'to';
 		var run = testCase.runner || options.runner || runner;
 
 		if ('values' in testCase) {
+			testMultiValues();
+		} else {
+			testSingleValue();
+		}
+
+		function testMultiValues() {
+			var expected;
+
 			expected = whichExpected(testCase.expected);
 			testCase.values.forEach(function (value, i) {
-				var _title = title({
-					name: testCase.name,
-					value: value
-				});
-				it(prefix + _title, function () {
+				it(prefix + title({ name: testCase.name, value: value }), function () {
 					expect(run(value, testCase.options))[to].deep.equal(expected(i));
 				});
 			});
-		} else {
-			it(prefix + title(testCase), function () {
-				if (testCase.error) {
-					expect(function () { run(testCase.value, testCase.options); })[to].throw(testCase.error);
-				} else if ('value' in testCase) {
-					expect(run(testCase.value, testCase.options))[to].deep.equal(testCase.expected);
-				}
-			});
 		}
 
-		function title(testCase) {
-			var template = testCase.name;
-			return template.replace(INTERPOLATE, function (match, paths) {
-				return get(testCase, paths) || '{' + paths + '}';
+		function testSingleValue() {
+			it(prefix + title(testCase), function () {
+				if (testCase.error) {
+					expect(expr)[to].throw(testCase.error);
+				} else if ('value' in testCase) {
+					expect(expr())[to].deep.equal(testCase.expected);
+				}
+
+				function expr() {
+					return run(testCase.value, testCase.options);
+				}
 			});
 		}
 
@@ -93,18 +100,27 @@ function cases(testCases, runner, options) {
 				return expected;
 			};
 		}
+
+		function title(test) {
+			return test.name.replace(INTERPOLATE, function (match, paths) {
+				return get(test, paths) || '{' + paths + '}';
+			});
+		}
 	}
 
-	function get(value, name) {
-		var i, n, path, paths = name.split('.');
+	function get(values, name) {
+		var i, n, path, paths, node;
+
+		node = values;
+		paths = name.split('.');
 		for (i = 0, n = paths.length; i < n; ++i) {
 			path = paths[i];
-			value = value[path];
-			if (typeof value === 'undefined') {
+			node = node[path];
+			if (typeof node === 'undefined') {
 				return null;
 			}
 		}
-		return JSON.stringify(value);
+		return JSON.stringify(node);
 	}
 }
 
