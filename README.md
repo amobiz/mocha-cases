@@ -3,7 +3,7 @@ A tiny mocha test case runner. Suited for simple input to output validation test
 
 ## Install
 ``` bash
-npm install --save-dev mocha-cases
+npm install mocha-cases
 ```
 
 ## Usage
@@ -13,56 +13,56 @@ npm install --save-dev mocha-cases
 var test = require('mocha-cases');
 
 var cases = [{
-	name: 'should {value.text} equal to {expected.text}, supports nested value interpolation',
-	value: { text: 'input value for test' },
-	expected: { text: 'expected output value' },
-	error: 'expected error',
-	runner: function (value, options) {},	// runner specific to this case
-	options: {},							// options specific to this case
-	async: false,							// is this an async test? i.e. returning a promise?
-	only: false,							// run this case only?
-	skip: false								// skip this case?
+    name: 'should {value.text} equal to {expected.text}, supports nested value interpolation',
+    value: { text: 'input value for test' },
+    expected: { text: 'expected output value' },
+    error: 'expected error',
+    runner: function (value, options) {},   // runner specific to this case
+    options: {},                            // options specific to this case
+    async: false,                           // is this an async test? i.e. returning a promise?
+    only: false,                            // run this case only?
+    skip: false                             // skip this case?
 }, {
-	name: 'case 2...',
-	...
+    name: 'case 2...',
+    ...
 }];
 
 var options = {
-	async: false,							// default async option
-	prefix: ''								// prefix to test names
+    async: false,                           // default async option
+    prefix: ''                              // prefix to test names
 };
 
 function runner(value, options) {
-	return 'expected output value';
+    return 'expected output value';
 }
 
 describe('module: mocha-cases', function () {
-	describe('feature: cases', function () {
-		test(cases, runner, options);
-	});
+    describe('feature: cases', function () {
+        test(cases, runner, options);
+    });
 });
 ```
 
 ### One case vs. multiple values vs. one expected
 ``` javascript
 describe('prime number', function () {
-	test({
-		name: 'given prime number {value}, isPrime() returns true',
-		values: [2, 3, 5, 7, 11, 13],
-		expected: true
-	}, isPrime);
+    test({
+        name: 'given prime number {value}, isPrime() returns true',
+        values: [2, 3, 5, 7, 11, 13],
+        expected: true
+    }, isPrime);
 });
 ```
 
 ### One case vs. multiple values vs. multiple expected
 ``` javascript
 describe('prime number', function () {
-	test({
-		name: 'given prime number {value}, isPrime() returns true, false otherwise',
-		values:   [2,    3,    4,     5,    6,     7,    8,     9],
-		expected: [true, true, false, true, false, true, false, false],
-		runner: isPrime
-	});
+    test({
+        name: 'given prime number {value}, isPrime() returns true, false otherwise',
+        values:   [2,    3,    4,     5,    6,     7,    8,     9],
+        expected: [true, true, false, true, false, true, false, false],
+        runner: isPrime
+    });
 });
 ```
 
