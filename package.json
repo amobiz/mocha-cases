@@ -1,6 +1,6 @@
 {
   "name": "mocha-cases",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "A tiny mocha test case runner. Suited for simple input to output validation tests.",
   "main": "index.js",
   "scripts": {
@@ -31,6 +31,6 @@
   },
   "dependencies": {
     "chai": "^3.4.1",
-    "chai-as-promised": "^5.1.0"
+    "chai-as-promised": "^5.2.0"
   }
 }

@@ -79,22 +79,26 @@ $ npm test
 
 ## Change Logs
 
+* 2015/12/24 - 0.1.6
+
+  * NPM: Update npm settings.
+
 * 2015/12/16 - 0.1.5
 
-  * Bug fix: fix error when expected values array contains falsy value.
+  * Bug fix: Fix error when expected values array contains falsy value.
 
 * 2015/12/07 - 0.1.4
 
-  * Move mocha from "dependencies" to "peerDependencies".
+  * NPM: Move mocha from "dependencies" to "peerDependencies".
 
 * 2015/12/03 - 0.1.3
 
-  * Allow multiple values in one case using "values" keyword.
+  * Fature: Allow multiple values in one case using "values" keyword.
 
 * 2015/12/03 - 0.1.1
 
-  * Make runner optional, or can be defined either in global options or case options.
-  * Allow value interpolation in test name.
+  * Fature: Make runner optional, or can be defined either in global options or case options.
+  * Fature: Allow value interpolation in test name.
 
 * 2015/11/23 - 0.1.0
 
