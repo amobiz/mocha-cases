@@ -22,22 +22,22 @@ var cases = [{
     value: { text: 'input value for test' },
     expected: { text: 'expected output value' },
     error: 'expected error',
-    runner: function (value, options) {},   // runner specific to this case
-    options: {},                            // options specific to this case
-    async: false,                           // is this an async test? i.e. returning a promise?
-    only: false,                            // run this case only?
-    skip: false                             // skip this case?
+    runner: function (value, options, done) {}, // runner specific to this case
+    options: {},                                // options specific to this case
+    only: false,                                // run this case only?
+    skip: false,                                // skip this case?
+    async: false                                // is this an async test?
 }, {
     name: 'case 2...',
     ...
 }];
 
 var options = {
-    async: false,                           // default async option
-    prefix: ''                              // prefix to test names
+    async: true,                                // is all test defaults to async?
+    prefix: ''                                  // prefix to test names
 };
 
-function runner(value, options) {
+function runner(value, options, done) {            // async runner takes a `done` callback
     return 'expected output value';
 }
 
@@ -84,13 +84,17 @@ $ npm test
 
 ## Change Logs
 
+* 2016/01/06 - 0.1.7
+
+  * Fature: Replace `chai-as-promised` with `async-done`. Now async runner can use callback or return promise, stream or observable.
+
 * 2015/12/24 - 0.1.6
 
   * NPM: Update npm settings.
 
 * 2015/12/16 - 0.1.5
 
-  * Bug fix: Fix error when expected values array contains falsy value.
+  * Bug Fix: Fix error when expected values array contains falsy value.
 
 * 2015/12/07 - 0.1.4
 
