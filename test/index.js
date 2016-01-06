@@ -107,4 +107,57 @@ describe('mocha-cases', function () {
 			test([testCase], options);
 		}
 	});
+
+	describe('dealing promise', function () {
+		var cases = [{
+			name: 'should eventually capture fulfilled result',
+			value: 'the fulfilled value',
+			expected: 'the fulfilled value',
+			runner: function resolved(value) {
+				return Promise.resolve(value);
+			}
+		}, {
+			name: 'should eventually capture rejected result',
+			value: 'rejected',
+			error: Error,
+			runner: function rejected() {
+				return Promise.reject(new Error());
+			}
+		}, {
+			name: 'should eventually capture throw as rejected result',
+			value: '',
+			error: Error,
+			runner: function throws() {
+				return new Promise(function () {
+					throw new Error();
+				});
+			}
+		}];
+
+		test(cases, { async: true });
+	});
+
+	describe('dealing errback', function () {
+		var cases = [{
+			name: 'should handle successful result',
+			value: 'the value',
+			expected: 'the value',
+			runner: function success(value, options, done) {
+				process.nextTick(function () {
+					done(null, value);
+				});
+			}
+		}, {
+			name: 'should handle error result',
+			value: 'rejected',
+			error: 'rejected',
+			runner: function error(value, options, done) {
+				process.nextTick(function () {
+					done(value);
+				});
+			}
+		}];
+
+		test(cases, { async: true });
+	});
 });

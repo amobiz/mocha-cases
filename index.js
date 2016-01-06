@@ -1,45 +1,40 @@
 /* eslint-env node, mocha */
 'use strict';
 
-var Chai = require('chai');
-var Promised = require('chai-as-promised');
-var expect = Chai.expect;
+var async = require('async-done');
+var expect = require('chai').expect;
 var _it = it;
 
 var INTERPOLATE = /{([\s\S]+?)}/g;
-
-Chai.use(Promised);
 
 /**
  * Run test runner using given test cases.
  * A tiny mocha test case runner. Suited for simple input to output validation tests.
  *
  * @param testCases {array | object} the test case(s) to verify
- * @param optionalRunner {function} optional, the test runner
- * @param optionalOptions {any} optional, extra value passed to runner
+ * @param runner {function} optional, the test runner
+ * @param options {any} optional, extra value passed to runner
  *
  */
-function cases(testCases, optionalRunner, optionalOptions) {
-	var it, options, prefix, runner, tests;
+function test(testCases, runner, options) {
+	var it, prefix, cases;
 
-	runner = optionalRunner || noop;
-	options = optionalOptions || {};
-
-	tests = Array.isArray(testCases) ? testCases : [testCases];
-	tests = filter(only) || filter(skip) || tests;
 	if (typeof runner !== 'function') {
-		options = runner;
-		runner = noop;
+		return test(testCases, noop, runner);
+	} else if (!options) {
+		return test(testCases, runner, {});
 	}
 
 	it = options.it || _it;
 	prefix = options.prefix || '';
-	tests.forEach(runTest);
+	cases = Array.isArray(testCases) ? testCases : [testCases];
+	cases = filter(only) || filter(skip) || cases;
+	cases.forEach(runTest);
 
 	function filter(fn) {
 		var filtered;
 
-		filtered = tests.filter(fn);
+		filtered = cases.filter(fn);
 		if (filtered.length) {
 			return filtered;
 		}
@@ -57,13 +52,12 @@ function cases(testCases, optionalRunner, optionalOptions) {
 	}
 
 	function runTest(testCase) {
-		var to = (testCase.async || options.async) ? 'eventually' : 'to';
 		var run = testCase.runner || options.runner || runner;
 
 		if ('values' in testCase) {
 			testMultiValues();
 		} else {
-			testSingleValue();
+			testSingleValue(testCase);
 		}
 
 		function testMultiValues() {
@@ -71,24 +65,51 @@ function cases(testCases, optionalRunner, optionalOptions) {
 
 			expected = whichExpected(testCase.expected);
 			testCase.values.forEach(function (value, i) {
-				it(prefix + title({ name: testCase.name, value: value }), function () {
-					expect(run(value, testCase.options))[to].deep.equal(expected(i));
+				testSingleValue({
+					name: testCase.name,
+					value: value,
+					expected: expected(i),
+					error: testCase.error,
+					options: testCase.options,
+					async: testCase.async
 				});
 			});
 		}
 
-		function testSingleValue() {
-			it(prefix + title(testCase), function () {
-				if (testCase.error) {
-					expect(expr)[to].throw(testCase.error);
-				} else if ('value' in testCase) {
-					expect(expr())[to].deep.equal(testCase.expected);
-				}
+		function testSingleValue(theCase) {
+			if (theCase.async || options.async) {
+				it(prefix + title(), function (testDone) {
+					async(function (done) {
+						return run(theCase.value, theCase.options, done);
+					}, sandbox(verify, testDone));
+				});
+			} else {
+				it(prefix + title(), function () {
+					sandbox(expr, verify)();
 
-				function expr() {
-					return run(testCase.value, testCase.options);
+					function expr() {
+						return run(theCase.value, theCase.options);
+					}
+				});
+			}
+
+			function title() {
+				return theCase.name.replace(INTERPOLATE, function (match, paths) {
+					return get(theCase, paths) || '{' + paths + '}';
+				});
+			}
+
+			function verify(err, actual) {
+				if (theCase.error) {
+					if (err instanceof Error) {
+						expect(err).to.be.instanceof(theCase.error);
+					} else {
+						expect(err).to.deep.equal(theCase.error);
+					}
+				} else {
+					expect(actual).to.deep.equal(theCase.expected);
 				}
-			});
+			}
 		}
 
 		function whichExpected(expected) {
@@ -100,12 +121,6 @@ function cases(testCases, optionalRunner, optionalOptions) {
 			return function () {
 				return expected;
 			};
-		}
-
-		function title(test) {
-			return test.name.replace(INTERPOLATE, function (match, paths) {
-				return get(test, paths) || '{' + paths + '}';
-			});
 		}
 	}
 
@@ -123,6 +138,19 @@ function cases(testCases, optionalRunner, optionalOptions) {
 		}
 		return JSON.stringify(node);
 	}
+
+	function sandbox(expr, done) {
+		return function () {
+			var err, result;
+
+			try {
+				result = expr.apply(null, arguments);
+			} catch (ex) {
+				err = ex;
+			}
+			done(err, result);
+		};
+	}
 }
 
-module.exports = cases;
+module.exports = test;
