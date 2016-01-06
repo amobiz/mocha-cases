@@ -19,7 +19,7 @@ var INTERPOLATE = /{([\s\S]+?)}/g;
 function test(testCases, runner, options) {
 	var it, prefix, cases;
 
-	if (typeof runner !== 'function') {
+	if (runner && typeof runner !== 'function') {
 		return test(testCases, noop, runner);
 	} else if (!options) {
 		return test(testCases, runner, {});
