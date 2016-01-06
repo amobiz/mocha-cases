@@ -84,7 +84,7 @@ $ npm test
 
 ## Change Logs
 
-* 2016/01/06 - 0.1.7
+* 2016/01/06 - 0.1.8
 
   * Fature: Replace `chai-as-promised` with `async-done`. Now async runner can use callback or return promise, stream or observable.
 
