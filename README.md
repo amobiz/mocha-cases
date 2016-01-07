@@ -26,19 +26,21 @@ var cases = [{
     options: {},                                // options specific to this case
     only: false,                                // run this case only?
     skip: false,                                // skip this case?
-    async: false                                // is this an async test?
+    errback: false                              // is the runner using a errback (callback)?
 }, {
     name: 'case 2...',
     ...
 }];
 
 var options = {
-    async: true,                                // is all test defaults to async?
+    errback: true,                              // is all test defaults to errback?
     prefix: ''                                  // prefix to test names
 };
 
-function runner(value, options, done) {            // async runner takes a `done` callback
-    return 'expected output value';
+function runner(value, options, done) {         // errback runner takes a `done` callback
+    setTimeout(function () {
+        done(null, 'expected output value');
+    }, 10);
 }
 
 describe('module: mocha-cases', function () {
@@ -83,6 +85,10 @@ $ npm test
  * [mocha-check](https://www.npmjs.com/package/mocha-check)
 
 ## Change Logs
+
+* 2016/01/07 - 0.1.9
+
+  * Fature: Deprecate the `async` option. For async runner that returning value, i.e. primitive value, promise, stream or observable, you don't have to add any option. For async runner that use errback (callback), you need to add `errback` option.
 
 * 2016/01/06 - 0.1.8
 
