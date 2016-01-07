@@ -149,11 +149,20 @@ describe('mocha-cases', function () {
 			}
 		}, {
 			name: 'should handle error result',
-			value: 'rejected',
+			value: 'the value',
 			error: 'rejected',
 			runner: function error(value, options, done) {
 				process.nextTick(function () {
-					done(value);
+					done('rejected');
+				});
+			}
+		}, {
+			name: 'should handle error class',
+			value: 'the value',
+			error: Error,
+			runner: function error(value, options, done) {
+				process.nextTick(function () {
+					done(new RangeError());
 				});
 			}
 		}];
