@@ -134,7 +134,7 @@ describe('mocha-cases', function () {
 			}
 		}];
 
-		test(cases, { async: true });
+		test(cases);
 	});
 
 	describe('dealing errback', function () {
@@ -158,6 +158,6 @@ describe('mocha-cases', function () {
 			}
 		}];
 
-		test(cases, { async: true });
+		test(cases, { errback: true });
 	});
 });

@@ -71,27 +71,27 @@ function test(testCases, runner, options) {
 					expected: expected(i),
 					error: testCase.error,
 					options: testCase.options,
-					async: testCase.async
+					errback: testCase.errback
 				});
 			});
 		}
 
 		function testSingleValue(theCase) {
-			if (theCase.async || options.async) {
-				it(prefix + title(), function (testDone) {
-					async(function (done) {
-						return run(theCase.value, theCase.options, done);
-					}, sandbox(verify, testDone));
-				});
-			} else {
-				it(prefix + title(), function () {
-					sandbox(expr, verify)();
+			it(prefix + title(), function (done) {
+				if (theCase.errback || options.errback) {
+					run(theCase.value, theCase.options, sandbox(verify, done));
+				} else {
+					async(function (asyncDone) {
+						var actual;
 
-					function expr() {
-						return run(theCase.value, theCase.options);
-					}
-				});
-			}
+						actual = run(theCase.value, theCase.options);
+						if (actual && typeof (actual.on || actual.subscribe || actual.then) === 'function') {
+							return actual;
+						}
+						asyncDone(null, actual);
+					}, sandbox(verify, done));
+				}
+			});
 
 			function title() {
 				return theCase.name.replace(INTERPOLATE, function (match, paths) {
