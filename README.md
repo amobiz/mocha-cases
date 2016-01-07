@@ -88,7 +88,7 @@ $ npm test
 
 * 2016/01/08 - 0.1.10
 
-  * Feature: Allow `error` to be an `Error` instance, an class or a normal value.
+  * Feature: Allow `error` to be an `Error` instance, a class or a normal value.
   * Feature: Allow test case negate `errback` option that enabled by overall options.
 
 * 2016/01/07 - 0.1.9
