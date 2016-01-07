@@ -19,25 +19,25 @@ var test = require('mocha-cases');
 
 var cases = [{
     name: 'should {value.text} equal to {expected.text}, supports nested value interpolation',
-    value: { text: 'input value for test' },
-    expected: { text: 'expected output value' },
-    error: 'expected error',
-    runner: function (value, options, done) {}, // runner specific to this case
-    options: {},                                // options specific to this case
-    only: false,                                // run this case only?
-    skip: false,                                // skip this case?
-    errback: false                              // is the runner using a errback (callback)?
+    value: { text: 'input value' },                 // input value
+    expected: { text: 'expected output value' },    // expected output value
+    error: RangeError,                              // expected error value, instance or class
+    runner: function (value, options) {},           // runner specific to this case
+    options: {},                                    // options specific to this case
+    only: false,                                    // run this case only?
+    skip: false,                                    // skip this case?
+    errback: false                                  // is the runner using an errback (callback)?
 }, {
     name: 'case 2...',
     ...
 }];
 
 var options = {
-    errback: true,                              // is all test defaults to errback?
-    prefix: ''                                  // prefix to test names
+    errback: true,                                  // is all test defaults to errback?
+    prefix: ''                                      // prefix to test names
 };
 
-function runner(value, options, done) {         // errback runner takes a `done` callback
+function runner(value, options, done) {             // errback runner takes a `done` callback
     setTimeout(function () {
         done(null, 'expected output value');
     }, 10);
@@ -86,13 +86,18 @@ $ npm test
 
 ## Change Logs
 
+* 2016/01/08 - 0.1.10
+
+  * Feature: Allow `error` to be an `Error` instance, an class or a normal value.
+  * Feature: Allow test case negate `errback` option that enabled by overall options.
+
 * 2016/01/07 - 0.1.9
 
-  * Fature: Deprecate the `async` option. For async runner that returning value, i.e. primitive value, promise, stream or observable, you don't have to add any option. For async runner that use errback (callback), you need to add `errback` option.
+  * Feature: Deprecate the `async` option. For sync/async runner that returning value, i.e. primitive value, promise, stream or observable, you don't have to add any option. For async runner that use errback (callback), you need to add `errback` option.
 
 * 2016/01/06 - 0.1.8
 
-  * Fature: Replace `chai-as-promised` with `async-done`. Now async runner can use callback or return promise, stream or observable.
+  * Feature: Replace `chai-as-promised` with `async-done`. Now async runner can use callback or return promise, stream or observable.
 
 * 2015/12/24 - 0.1.6
 
@@ -108,12 +113,12 @@ $ npm test
 
 * 2015/12/03 - 0.1.3
 
-  * Fature: Allow multiple values in one case using "values" keyword.
+  * Feature: Allow multiple values in one case using "values" keyword.
 
 * 2015/12/03 - 0.1.1
 
-  * Fature: Make runner optional, or can be defined either in global options or case options.
-  * Fature: Allow value interpolation in test name.
+  * Feature: Make runner optional, or can be defined either in global options or case options.
+  * Feature: Allow value interpolation in test name.
 
 * 2015/11/23 - 0.1.0
 

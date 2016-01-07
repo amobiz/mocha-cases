@@ -17,16 +17,15 @@ var INTERPOLATE = /{([\s\S]+?)}/g;
  *
  */
 function test(testCases, runner, options) {
-	var it, prefix, cases;
+	var it, cases;
 
 	if (runner && typeof runner !== 'function') {
-		return test(testCases, noop, runner);
+		return test(testCases, null, runner);
 	} else if (!options) {
 		return test(testCases, runner, {});
 	}
 
 	it = options.it || _it;
-	prefix = options.prefix || '';
 	cases = Array.isArray(testCases) ? testCases : [testCases];
 	cases = filter(only) || filter(skip) || cases;
 	cases.forEach(runTest);
@@ -48,11 +47,9 @@ function test(testCases, runner, options) {
 		return !testCase.skip;
 	}
 
-	function noop() {
-	}
-
 	function runTest(testCase) {
-		var run = testCase.runner || options.runner || runner;
+		var prefix = testCase.prefix || options.prefix || '';
+		var testRunner = getTestRunner(testCase);
 
 		if ('values' in testCase) {
 			testMultiValues();
@@ -60,37 +57,65 @@ function test(testCases, runner, options) {
 			testSingleValue(testCase);
 		}
 
+		function getTestRunner() {
+			var run;
+
+			run = testCase.runner || options.runner || runner;
+			return isErrback() ? testErrback : testFunctional;
+
+			function isErrback() {
+				if ('errback' in testCase) {
+					return testCase.errback;
+				}
+				return options.errback;
+			}
+
+			function testErrback(theCase, done) {
+				run(theCase.value, theCase.options, done);
+			}
+
+			function testFunctional(theCase, done) {
+				async(function (asyncDone) {
+					var actual;
+
+					actual = run(theCase.value, theCase.options);
+					if (actual && typeof (actual.on || actual.subscribe || actual.then) === 'function') {
+						return actual;
+					}
+					asyncDone(null, actual);
+				}, done);
+			}
+		}
+
 		function testMultiValues() {
 			var expected;
 
-			expected = whichExpected(testCase.expected);
+			expected = which(testCase.expected);
 			testCase.values.forEach(function (value, i) {
 				testSingleValue({
 					name: testCase.name,
 					value: value,
 					expected: expected(i),
 					error: testCase.error,
-					options: testCase.options,
-					errback: testCase.errback
+					options: testCase.options
 				});
 			});
+
+			function which(values) {
+				if (Array.isArray(values)) {
+					return function (index) {
+						return values[index];
+					};
+				}
+				return function () {
+					return values;
+				};
+			}
 		}
 
 		function testSingleValue(theCase) {
 			it(prefix + title(), function (done) {
-				if (theCase.errback || options.errback) {
-					run(theCase.value, theCase.options, sandbox(verify, done));
-				} else {
-					async(function (asyncDone) {
-						var actual;
-
-						actual = run(theCase.value, theCase.options);
-						if (actual && typeof (actual.on || actual.subscribe || actual.then) === 'function') {
-							return actual;
-						}
-						asyncDone(null, actual);
-					}, sandbox(verify, done));
-				}
+				testRunner(theCase, sandbox(verify, done));
 			});
 
 			function title() {
@@ -101,7 +126,7 @@ function test(testCases, runner, options) {
 
 			function verify(err, actual) {
 				if (theCase.error) {
-					if (err instanceof Error) {
+					if (typeof theCase.error === 'function') {
 						expect(err).to.be.instanceof(theCase.error);
 					} else {
 						expect(err).to.deep.equal(theCase.error);
@@ -111,46 +136,35 @@ function test(testCases, runner, options) {
 				}
 			}
 		}
+	}
+}
 
-		function whichExpected(expected) {
-			if (Array.isArray(expected)) {
-				return function (index) {
-					return expected[index];
-				};
-			}
-			return function () {
-				return expected;
-			};
+function get(values, name) {
+	var i, n, path, paths, node;
+
+	node = values;
+	paths = name.split('.');
+	for (i = 0, n = paths.length; i < n; ++i) {
+		path = paths[i];
+		node = node[path];
+		if (typeof node === 'undefined') {
+			return null;
 		}
 	}
+	return JSON.stringify(node);
+}
 
-	function get(values, name) {
-		var i, n, path, paths, node;
+function sandbox(expr, done) {
+	return function () {
+		var err, result;
 
-		node = values;
-		paths = name.split('.');
-		for (i = 0, n = paths.length; i < n; ++i) {
-			path = paths[i];
-			node = node[path];
-			if (typeof node === 'undefined') {
-				return null;
-			}
+		try {
+			result = expr.apply(null, arguments);
+		} catch (ex) {
+			err = ex;
 		}
-		return JSON.stringify(node);
-	}
-
-	function sandbox(expr, done) {
-		return function () {
-			var err, result;
-
-			try {
-				result = expr.apply(null, arguments);
-			} catch (ex) {
-				err = ex;
-			}
-			done(err, result);
-		};
-	}
+		done(err, result);
+	};
 }
 
 module.exports = test;

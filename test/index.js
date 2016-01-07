@@ -20,9 +20,7 @@ describe('mocha-cases', function () {
 			value: 'oops!',
 			error: Error,
 			runner: function (value) {
-				if (value === 'oops!') {
-					throw new Error(value);
-				}
+				throw new Error(value);
 			}
 		}];
 
@@ -113,6 +111,7 @@ describe('mocha-cases', function () {
 			name: 'should eventually capture fulfilled result',
 			value: 'the fulfilled value',
 			expected: 'the fulfilled value',
+			errback: false,
 			runner: function resolved(value) {
 				return Promise.resolve(value);
 			}
@@ -120,6 +119,7 @@ describe('mocha-cases', function () {
 			name: 'should eventually capture rejected result',
 			value: 'rejected',
 			error: Error,
+			errback: false,
 			runner: function rejected() {
 				return Promise.reject(new Error());
 			}
@@ -127,6 +127,7 @@ describe('mocha-cases', function () {
 			name: 'should eventually capture throw as rejected result',
 			value: '',
 			error: Error,
+			errback: false,
 			runner: function throws() {
 				return new Promise(function () {
 					throw new Error();
@@ -134,7 +135,7 @@ describe('mocha-cases', function () {
 			}
 		}];
 
-		test(cases);
+		test(cases, { errback: true });
 	});
 
 	describe('dealing errback', function () {
@@ -160,6 +161,15 @@ describe('mocha-cases', function () {
 			name: 'should handle error class',
 			value: 'the value',
 			error: Error,
+			runner: function error(value, options, done) {
+				process.nextTick(function () {
+					done(new RangeError());
+				});
+			}
+		}, {
+			name: 'should handle error instance',
+			value: 'the value',
+			error: new RangeError(),
 			runner: function error(value, options, done) {
 				process.nextTick(function () {
 					done(new RangeError());
