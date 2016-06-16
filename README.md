@@ -2,6 +2,7 @@
 A tiny mocha test case runner. Suited for simple input to output validation tests.
 
 [![MIT](http://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/amobiz/mocha-cases/blob/master/LICENSE) [![npm version](https://badge.fury.io/js/mocha-cases.svg)](http://badge.fury.io/js/mocha-cases) [![David Dependency Badge](https://david-dm.org/amobiz/mocha-cases.svg)](https://david-dm.org/amobiz/mocha-cases)
+[![Build Status](https://travis-ci.org/amobiz/mocha-cases.svg?branch=master)](https://travis-ci.org/amobiz/mocha-cases)
 
 [![NPM](https://nodei.co/npm/mocha-cases.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/mocha-cases.png?downloads=true&downloadRank=true&stars=true) [![NPM](https://nodei.co/npm-dl/mocha-cases.png?months=6&height=3)](https://nodei.co/npm/mocha-cases/)
 
