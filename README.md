@@ -74,6 +74,27 @@ describe('prime number', function () {
 });
 ```
 
+#### or
+
+``` javascript
+describe('prime number', function () {
+    test({
+        name: 'isPrime({value}) should be {expected}',
+        cases: [
+            [2, true],
+            [3, true],
+            [4, false],
+            [5, true],
+            [6, false],
+            [7, true],
+            [8, false],
+            [9, false]
+        ]
+        runner: isPrime
+    });
+});
+```
+
 ## Test
 ``` bash
 $ npm test

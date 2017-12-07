@@ -26,7 +26,7 @@ describe('mocha-cases', function () {
 
 		test(cases);
 	});
-	describe('dealing with miltiple test values', function () {
+	describe('dealing with multiple test values', function () {
 		var cases = [{
 			name: 'should handle single expected value',
 			values: [2, 4, 6, 8, 10],
@@ -44,6 +44,19 @@ describe('mocha-cases', function () {
 		}];
 
 		test(cases);
+	});
+	describe('dealing with multiple test cases as pairs value-expected', function () {
+		test({
+			name: 'should handle array of pairs {value}-{expected}',
+			cases: [
+				[2, 0],
+				[4, 0],
+				[3, 1]
+			],
+			runner: function (value) {
+				return value % 2;
+			}
+		});
 	});
 	describe('dealing value interpolating', function () {
 		var cases = [{

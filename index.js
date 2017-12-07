@@ -53,6 +53,8 @@ function test(testCases, runner, options) {
 
 		if ('values' in testCase) {
 			testMultiValues();
+		} else if ('cases' in testCase) {
+			testPairValues();
 		} else {
 			testSingleValue(testCase);
 		}
@@ -111,6 +113,18 @@ function test(testCases, runner, options) {
 					return values;
 				};
 			}
+		}
+
+		function testPairValues() {
+			testCase.cases.forEach(function (value) {
+				testSingleValue({
+					name: testCase.name,
+					value: value[0],
+					expected: value[1],
+					error: testCase.error,
+					options: testCase.options
+				});
+			});
 		}
 
 		function testSingleValue(theCase) {
