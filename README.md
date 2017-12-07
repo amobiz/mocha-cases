@@ -74,6 +74,27 @@ describe('prime number', function () {
 });
 ```
 
+#### or
+
+``` javascript
+describe('prime number', function () {
+    test({
+        name: 'isPrime({value}) should be {expected}',
+        cases: [
+            [2, true],
+            [3, true],
+            [4, false],
+            [5, true],
+            [6, false],
+            [7, true],
+            [8, false],
+            [9, false]
+        ]
+        runner: isPrime
+    });
+});
+```
+
 ## Test
 ``` bash
 $ npm test
@@ -86,6 +107,10 @@ $ npm test
  * [mocha-check](https://www.npmjs.com/package/mocha-check)
 
 ## Change Logs
+
+* 2017/12/07 - 0.1.11
+
+  * Feature: New format for adding test-cases.
 
 * 2016/01/08 - 0.1.10
 
