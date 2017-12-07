@@ -108,6 +108,10 @@ $ npm test
 
 ## Change Logs
 
+* 2017/12/07 - 0.1.11
+
+  * Feature: New format for adding test-cases.
+
 * 2016/01/08 - 0.1.10
 
   * Feature: Allow `error` to be an `Error` instance, a class or a normal value.
