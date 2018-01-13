@@ -6,6 +6,8 @@ var _it = it;
 
 var test = require('../');
 
+var errorInstance = new RangeError('Error objects are compared by reference (see https://github.com/chaijs/chai/issues/608)');
+
 describe('mocha-cases', function () {
 	describe('dealing with single test value', function () {
 		var cases = [{
@@ -176,16 +178,16 @@ describe('mocha-cases', function () {
 			error: Error,
 			runner: function error(value, options, done) {
 				process.nextTick(function () {
-					done(new RangeError());
+					done(errorInstance);
 				});
 			}
 		}, {
 			name: 'should handle error instance',
 			value: 'the value',
-			error: new RangeError(),
+			error: errorInstance,
 			runner: function error(value, options, done) {
 				process.nextTick(function () {
-					done(new RangeError());
+					done(errorInstance);
 				});
 			}
 		}];
