@@ -17,53 +17,32 @@ var INTERPOLATE = /{([\s\S]+?)}/g;
  *
  */
 function test(testCases, runner, options) {
-	var it, cases;
-
-	if (runner && typeof runner !== 'function') {
+	if (!Array.isArray(testCases)) {
+		return test([testCases], runner, options);
+	} else if (runner && typeof runner !== 'function') {
 		return test(testCases, null, runner);
 	} else if (!options) {
 		return test(testCases, runner, {});
 	}
 
-	it = options.it || _it;
-	cases = Array.isArray(testCases) ? testCases : [testCases];
-	cases = filter(only) || filter(skip) || cases;
-	cases.forEach(runTest);
-
-	function filter(fn) {
-		var filtered;
-
-		filtered = cases.filter(fn);
-		if (filtered.length) {
-			return filtered;
-		}
-	}
-
-	function only(testCase) {
-		return testCase.only;
-	}
-
-	function skip(testCase) {
-		return !testCase.skip;
-	}
+	var it = options.it || _it;
+	(filter(testCases, only) || filter(testCases, skip) || testCases).forEach(runTest);
 
 	function runTest(testCase) {
 		var prefix = testCase.prefix || options.prefix || '';
-		var testRunner = getTestRunner(testCase);
+		var testRunner = getTestRunner();
 
-		if ('values' in testCase) {
+  	if ('cases' in testCase) {
+	  	testPairValues();
+		} else if ('values' in testCase) {
 			testMultiValues();
-		} else if ('cases' in testCase) {
-			testPairValues();
 		} else {
 			testSingleValue(testCase);
 		}
 
 		function getTestRunner() {
-			var run;
-
-			run = testCase.runner || options.runner || runner;
-			return isErrback() ? testErrback : testFunctional;
+			var run = testCase.runner || options.runner || runner;
+			return isErrback() ? testErrback : testAsyncDone;
 
 			function isErrback() {
 				if ('errback' in testCase) {
@@ -76,7 +55,7 @@ function test(testCases, runner, options) {
 				run(theCase.value, theCase.options, done);
 			}
 
-			function testFunctional(theCase, done) {
+			function testAsyncDone(theCase, done) {
 				async(function (asyncDone) {
 					var actual;
 
@@ -89,10 +68,20 @@ function test(testCases, runner, options) {
 			}
 		}
 
-		function testMultiValues() {
-			var expected;
+		function testPairValues() {
+			testCase.cases.forEach(function (value) {
+				testSingleValue({
+					name: testCase.name,
+					value: value[0],
+					expected: value[1],
+					error: testCase.error,
+					options: testCase.options
+				});
+			});
+		}
 
-			expected = which(testCase.expected);
+		function testMultiValues() {
+			var expected = which(testCase.expected);
 			testCase.values.forEach(function (value, i) {
 				testSingleValue({
 					name: testCase.name,
@@ -115,28 +104,10 @@ function test(testCases, runner, options) {
 			}
 		}
 
-		function testPairValues() {
-			testCase.cases.forEach(function (value) {
-				testSingleValue({
-					name: testCase.name,
-					value: value[0],
-					expected: value[1],
-					error: testCase.error,
-					options: testCase.options
-				});
-			});
-		}
-
 		function testSingleValue(theCase) {
-			it(prefix + title(), function (done) {
+			it(prefix + title(theCase), function (done) {
 				testRunner(theCase, sandbox(verify, done));
 			});
-
-			function title() {
-				return theCase.name.replace(INTERPOLATE, function (match, paths) {
-					return get(theCase, paths) || '{' + paths + '}';
-				});
-			}
 
 			function verify(err, actual) {
 				if (theCase.error) {
@@ -151,6 +122,27 @@ function test(testCases, runner, options) {
 			}
 		}
 	}
+}
+
+function filter(testCases, fn) {
+	var filtered = testCases.filter(fn);
+	if (filtered.length) {
+		return filtered;
+	}
+}
+
+function only(testCase) {
+	return testCase.only;
+}
+
+function skip(testCase) {
+	return !testCase.skip;
+}
+
+function title(testCase) {
+	return testCase.name.replace(INTERPOLATE, function (match, paths) {
+		return get(testCase, paths) || '{' + paths + '}';
+	});
 }
 
 function get(values, name) {
