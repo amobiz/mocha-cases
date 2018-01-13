@@ -1,6 +1,6 @@
 {
   "name": "mocha-cases",
-  "version": "0.1.10",
+  "version": "0.2.0",
   "description": "A tiny mocha test case runner. Suited for simple input to output validation tests.",
   "main": "index.js",
   "scripts": {
