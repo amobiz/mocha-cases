@@ -17,21 +17,24 @@
     "runner",
     "json"
   ],
-  "author": "Amobiz",
+  "author": "Amobiz <amobiz.tw+github@gmail.com> (https://github.com/amobiz)",
+  "contributors": [
+    "Ivan Sosnin <vansosnin@gmail.com> (https://github.com/vansosnin)"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/amobiz/mocha-cases/issues"
   },
   "homepage": "https://github.com/amobiz/mocha-cases#readme",
   "peerDependencies": {
-    "mocha": "^2.3.4"
+    "mocha": ">=2.3.4"
   },
   "devDependencies": {
-    "eslint": "^2.12.0",
-    "mocha": "^2.3.4"
+    "eslint": "^4.15.0",
+    "mocha": "^4.1.0"
   },
   "dependencies": {
-    "async-done": "^1.2.0",
-    "chai": "^3.4.1"
+    "async-done": "^1.2.3",
+    "chai": "^4.1.2"
   }
 }

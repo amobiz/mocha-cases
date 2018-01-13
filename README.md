@@ -108,6 +108,10 @@ $ npm test
 
 ## Change Logs
 
+* 2018/01/14 - 0.2.0
+
+  * NPM: Bump version, update readme and publish to npm.js.
+
 * 2017/12/07 - 0.1.11
 
   * Feature: New format for adding test-cases.
@@ -155,3 +159,6 @@ MIT
 
 ## Author
 [Amobiz](https://github.com/amobiz)
+
+## Contributor
+[Ivan Sosnin](https://github.com/vansosnin)
