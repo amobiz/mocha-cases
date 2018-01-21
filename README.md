@@ -19,26 +19,28 @@ npm install mocha-cases
 var test = require('mocha-cases');
 
 var cases = [{
-  name: 'should {value.text} equal to {expected.text}, supports nested value interpolation',
-  value: { text: 'input value' },                 // input value
-  expected: { text: 'expected output value' },    // expected output value
-  error: RangeError,                              // expected error value, instance or class
-  runner: function (value, options) {},           // runner specific to this case
-  options: {},                                    // options specific to this case
-  only: false,                                    // run this case only?
-  skip: false,                                    // skip this case?
-  errback: false                                  // is the runner using an errback (callback)?
+  name: 'should {value.text} equal to {expected.text}', // name of the test,
+                                                        //   a string, supports nested value interpolation
+                                                        //   or a function, takes test value, expected value and options, and returns a string
+  value: { text: 'input value' },                       // input value
+  expected: { text: 'expected output value' },          // expected output value
+  error: RangeError,                                    // expected error value, instance or class
+  runner: function (value, options) {},                 // runner specific to this case
+  options: {},                                          // options specific to this case
+  only: false,                                          // run this case only?
+  skip: false,                                          // skip this case?
+  errback: false                                        // is the runner using an errback (callback)?
 }, {
   name: 'case 2...',
   ...
 }];
 
 var options = {
-  errback: true,                                  // is all test defaults to errback?
-  prefix: ''                                      // prefix to test names
+  errback: true,                                        // is all test defaults to errback?
+  prefix: ''                                            // prefix to test names
 };
 
-function runner(value, options, done) {             // errback runner takes a `done` callback
+function runner(value, options, done) {                 // errback runner takes a `done` callback
   setTimeout(function () {
     done(null, 'expected output value');
   }, 10);

@@ -144,6 +144,10 @@ function skip(testCase) {
 }
 
 function title(testCase) {
+  if (typeof testCase.name === 'function') {
+    return testCase.name(testCase.value, testCase.expected, testCase.options);
+  }
+
   return testCase.name.replace(INTERPOLATE, function (match, paths) {
     return get(testCase, paths) || '{' + paths + '}';
   });
