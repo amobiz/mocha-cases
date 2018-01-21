@@ -149,7 +149,7 @@
 		"func-style": "off",
 		"id-length": "off",
 		"id-match": "off",
-		"indent": ["warn", "tab"],
+		"indent": ["warn", 2],
 		"jsx-quotes": ["warn", "prefer-double"],
 		"key-spacing": ["warn", {
 			"beforeColon": false,
