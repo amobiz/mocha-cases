@@ -51,6 +51,8 @@ describe('module: mocha-cases', function () {
 });
 ```
 
+Default pass through runner will be used if no runner provided at all.
+
 ### One case vs. multiple values vs. one expected
 ``` javascript
 describe('prime number', function () {
