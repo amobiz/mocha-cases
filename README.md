@@ -19,58 +19,58 @@ npm install mocha-cases
 var test = require('mocha-cases');
 
 var cases = [{
-    name: 'should {value.text} equal to {expected.text}, supports nested value interpolation',
-    value: { text: 'input value' },                 // input value
-    expected: { text: 'expected output value' },    // expected output value
-    error: RangeError,                              // expected error value, instance or class
-    runner: function (value, options) {},           // runner specific to this case
-    options: {},                                    // options specific to this case
-    only: false,                                    // run this case only?
-    skip: false,                                    // skip this case?
-    errback: false                                  // is the runner using an errback (callback)?
+  name: 'should {value.text} equal to {expected.text}, supports nested value interpolation',
+  value: { text: 'input value' },                 // input value
+  expected: { text: 'expected output value' },    // expected output value
+  error: RangeError,                              // expected error value, instance or class
+  runner: function (value, options) {},           // runner specific to this case
+  options: {},                                    // options specific to this case
+  only: false,                                    // run this case only?
+  skip: false,                                    // skip this case?
+  errback: false                                  // is the runner using an errback (callback)?
 }, {
-    name: 'case 2...',
-    ...
+  name: 'case 2...',
+  ...
 }];
 
 var options = {
-    errback: true,                                  // is all test defaults to errback?
-    prefix: ''                                      // prefix to test names
+  errback: true,                                  // is all test defaults to errback?
+  prefix: ''                                      // prefix to test names
 };
 
 function runner(value, options, done) {             // errback runner takes a `done` callback
-    setTimeout(function () {
-        done(null, 'expected output value');
-    }, 10);
+  setTimeout(function () {
+    done(null, 'expected output value');
+  }, 10);
 }
 
 describe('module: mocha-cases', function () {
-    describe('feature: cases', function () {
-        test(cases, runner, options);
-    });
+  describe('feature: cases', function () {
+    test(cases, runner, options);
+  });
 });
 ```
 
 ### One case vs. multiple values vs. one expected
 ``` javascript
 describe('prime number', function () {
-    test({
-        name: 'given prime number {value}, isPrime() returns true',
-        values: [2, 3, 5, 7, 11, 13],
-        expected: true
-    }, isPrime);
+  test({
+    name: 'given prime number {value}, isPrime() returns true',
+    values: [2, 3, 5, 7, 11, 13],
+    expected: true
+  }, isPrime);
 });
 ```
 
 ### One case vs. multiple values vs. multiple expected
 ``` javascript
 describe('prime number', function () {
-    test({
-        name: 'given prime number {value}, isPrime() returns true, false otherwise',
-        values:   [2,    3,    4,     5,    6,     7,    8,     9],
-        expected: [true, true, false, true, false, true, false, false],
-        runner: isPrime
-    });
+  test({
+    name: 'given prime number {value}, isPrime() returns true, false otherwise',
+    values:   [2,    3,    4,     5,    6,     7,    8,     9],
+    expected: [true, true, false, true, false, true, false, false],
+    runner: isPrime
+  });
 });
 ```
 
@@ -78,20 +78,20 @@ describe('prime number', function () {
 
 ``` javascript
 describe('prime number', function () {
-    test({
-        name: 'isPrime({value}) should be {expected}',
-        cases: [
-            [2, true],
-            [3, true],
-            [4, false],
-            [5, true],
-            [6, false],
-            [7, true],
-            [8, false],
-            [9, false]
-        ]
-        runner: isPrime
-    });
+  test({
+    name: 'isPrime({value}) should be {expected}',
+    cases: [
+      [2, true],
+      [3, true],
+      [4, false],
+      [5, true],
+      [6, false],
+      [7, true],
+      [8, false],
+      [9, false]
+    ]
+    runner: isPrime
+  });
 });
 ```
 
