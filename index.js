@@ -41,8 +41,12 @@ function test(testCases, runner, options) {
     }
 
     function getTestRunner() {
-      var run = testCase.runner || options.runner || runner;
+      var run = testCase.runner || options.runner || runner || passThrough;
       return isErrback() ? testErrback : testAsyncDone;
+
+      function passThrough(value) {
+        return value;
+      }
 
       function isErrback() {
         if ('errback' in testCase) {
