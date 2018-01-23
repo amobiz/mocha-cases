@@ -112,6 +112,11 @@ $ npm test
 
 ## Change Logs
 
+* 2018/01/23 - 0.2.1
+
+  * Feature: Accept function for test name
+  * Feature: Add default pass through runner
+
 * 2018/01/14 - 0.2.0
 
   * NPM: Bump version, update readme and publish to npm.js.
