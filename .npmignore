@@ -1,8 +1,8 @@
 # Build
-test
 .eslintrc.json
 gruntfile.js
 gulpfile.js
+index.test.js
 jsdoc.conf.json
 
 # IDE Settings
