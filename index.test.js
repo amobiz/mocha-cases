@@ -28,7 +28,7 @@ describe('mocha-cases', function () {
 
     test(cases);
   });
-  describe('dealing with multiple test values', function () {
+  describe('dealing with multiple test values with single expected value', function () {
     var cases = [{
       name: 'should handle single expected value',
       values: [2, 4, 6, 8, 10],
@@ -37,7 +37,7 @@ describe('mocha-cases', function () {
         return value % 2;
       }
     }, {
-      name: 'should handle miltiple expected values',
+      name: 'should handle miltiple expected values each with corresponding expected values',
       values:   [3, 0, false, undefined, null, [], {}, ''],
       expected: [3, 0, false, undefined, null, [], {}, ''],
       runner: function echo(value) {
@@ -47,9 +47,27 @@ describe('mocha-cases', function () {
 
     test(cases);
   });
-  describe('dealing with multiple test cases as pairs value-expected', function () {
+  describe('dealing with multiple test cases as object with {value, expected} properies', function () {
     test({
-      name: 'should handle array of pairs {value}-{expected}',
+      name: 'should handle array of pairs \\{value: {value}, expected: {expected}\\}',
+      cases: [{
+        value: 2,
+        expected: 0
+      }, {
+        value: 4,
+        expected: 0
+      }, {
+        value: 3,
+        expected: 1
+      }],
+      runner: function (value) {
+        return value % 2;
+      }
+    });
+  });
+  describe('dealing with multiple test cases as pairs of [value, expected]', function () {
+    test({
+      name: 'should handle array of pairs [{value}, {expected}]',
       cases: [
         [2, 0],
         [4, 0],
