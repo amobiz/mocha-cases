@@ -1,11 +1,10 @@
-/* eslint-env node, mocha */
 'use strict';
 
 var async = require('async-done');
 var expect = require('chai').expect;
 var _it = it;
 
-var INTERPOLATE = /{([\s\S]+?)}/g;
+var INTERPOLATE = /\\{|\\}|{\s*([.\w]+?)\s*}/gm;
 
 /**
  * Run test runner using given test cases.
@@ -17,6 +16,8 @@ var INTERPOLATE = /{([\s\S]+?)}/g;
  *
  */
 function test(testCases, runner, options) {
+  var it;
+
   if (!Array.isArray(testCases)) {
     return test([testCases], runner, options);
   } else if (runner && typeof runner !== 'function') {
@@ -25,7 +26,7 @@ function test(testCases, runner, options) {
     return test(testCases, runner, {});
   }
 
-  var it = options.it || _it;
+  it = options.it || _it;
   (filter(testCases, only) || filter(testCases, skip) || testCases).forEach(runTest);
 
   function runTest(testCase) {
@@ -42,6 +43,7 @@ function test(testCases, runner, options) {
 
     function getTestRunner() {
       var run = testCase.runner || options.runner || runner || passThrough;
+
       return isErrback() ? testErrback : testAsyncDone;
 
       function passThrough(value) {
@@ -86,6 +88,7 @@ function test(testCases, runner, options) {
 
     function testMultiValues() {
       var expected = which(testCase.expected);
+
       testCase.values.forEach(function (value, i) {
         testSingleValue({
           name: testCase.name,
@@ -130,6 +133,7 @@ function test(testCases, runner, options) {
 
 function filter(testCases, fn) {
   var filtered = testCases.filter(fn);
+
   if (filtered.length) {
     return filtered;
   }
@@ -149,7 +153,14 @@ function title(testCase) {
   }
 
   return testCase.name.replace(INTERPOLATE, function (match, paths) {
-    return get(testCase, paths) || '{' + paths + '}';
+    switch (match) {
+    case '\\{':
+      return '{';
+    case '\\}':
+      return '}';
+    default:
+      return get(testCase, paths) || '{' + paths + '}';
+    }
   });
 }
 

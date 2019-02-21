@@ -103,6 +103,20 @@ describe('mocha-cases', function () {
       options: {
         expected: 'should not replace if expected value not resolved: {expected.not.resolvable}'
       }
+    }, {
+      name: 'should handle brace characters escaping with valid value interpolating: \\{{ value }\\} \\{{ value}\\} \\{{value }\\} \\{{value}\\}',
+      value: 520,
+      expected: {},
+      options: {
+        expected: 'should handle brace characters escaping with valid value interpolating: {520} {520} {520} {520}'
+      }
+    }, {
+      name: 'should handle brace characters escaping with invalid value interpolating: \\{{value\\}} {\\{value}\\} {\\{value\\}} \\{value} {value\\} \\{\\} \\{} {\\} { \\} {\\ }',
+      value: 520,
+      expected: {},
+      options: {
+        expected: 'should handle brace characters escaping with invalid value interpolating: {{value}} {{value}} {{value}} {value} {value} {} {} {} { } {\\ }'
+      }
     }];
 
     cases.forEach(runTest);
