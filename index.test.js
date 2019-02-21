@@ -4,7 +4,7 @@
 var expect = require('chai').expect;
 var _it = it;
 
-var test = require('../');
+var test = require('./');
 
 var errorInstance = new RangeError('Error objects are compared by reference (see https://github.com/chaijs/chai/issues/608)');
 
