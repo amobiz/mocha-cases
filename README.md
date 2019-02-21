@@ -37,7 +37,7 @@ var cases = [{
 
 var options = {
   errback: true,                                        // is all test defaults to errback?
-  prefix: ''                                            // prefix to test names
+  prefix: ''                                             // prefix to test names
 };
 
 function runner(value, options, done) {                 // errback runner takes a `done` callback
@@ -56,6 +56,9 @@ describe('module: mocha-cases', function () {
 Default pass through runner will be used if no runner provided at all.
 
 ### One case vs. multiple values vs. one expected
+
+You can use an array of `values` with a single `expected` value:
+
 ``` javascript
 describe('prime number', function () {
   test({
@@ -67,6 +70,9 @@ describe('prime number', function () {
 ```
 
 ### One case vs. multiple values vs. multiple expected
+
+You can use an array of `values` and an array of `expected` values, to pair multiple given values and expected values:
+
 ``` javascript
 describe('prime number', function () {
   test({
@@ -78,7 +84,43 @@ describe('prime number', function () {
 });
 ```
 
-#### or
+Or, you can use `cases` to specify multiple cases:
+
+``` javascript
+describe('prime number', function () {
+  test({
+    name: 'isPrime({value}) should be {expected}',
+    cases: [{
+      value: 2,
+      expected: true
+    }, {
+      value: 3,
+      expected: true
+    }, {
+      value: 4,
+      expected: false
+    }, {
+      value: 5,
+      expected: true
+    }, {
+      value: 6,
+      expected: false
+    }, {
+      value: 7,
+      expected: true
+    }, {
+      value: 8,
+      expected: false
+    }, {
+      value: 9,
+      expected: false
+    }],
+    runner: isPrime
+  });
+});
+```
+
+If your values are simple enougth, you may want to simplify them with a pair of value / expected value for each case:
 
 ``` javascript
 describe('prime number', function () {
@@ -93,7 +135,7 @@ describe('prime number', function () {
       [7, true],
       [8, false],
       [9, false]
-    ]
+    ],
     runner: isPrime
   });
 });
@@ -111,6 +153,11 @@ $ npm test
  * [mocha-check](https://www.npmjs.com/package/mocha-check)
 
 ## Change Logs
+
+* 2019/02/22 - 0.3.0
+
+  * Feature: Allow escaping the brace characters `{` and `}` with `\\`.
+  * Feature: Allow entries of `cases` be an object.
 
 * 2018/01/23 - 0.2.1
 
