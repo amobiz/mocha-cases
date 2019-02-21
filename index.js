@@ -75,11 +75,20 @@ function test(testCases, runner, options) {
     }
 
     function testPairValues() {
-      testCase.cases.forEach(function (value) {
+      testCase.cases.forEach(function (theCase) {
+        var value, expected;
+
+        if (Array.isArray(theCase)) {
+          value = theCase[0];
+          expected = theCase[1];
+        } else {
+          value = theCase.value;
+          expected = theCase.expected;
+        }
         testSingleValue({
           name: testCase.name,
-          value: value[0],
-          expected: value[1],
+          value: value,
+          expected: expected,
           error: testCase.error,
           options: testCase.options
         });
