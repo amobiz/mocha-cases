@@ -1,5 +1,3 @@
-'use strict';
-
 var async = require('async-done');
 var expect = require('chai').expect;
 var _it = it;
@@ -90,7 +88,7 @@ function test(testCases, runner, options) {
           value: value,
           expected: expected,
           error: testCase.error,
-          options: testCase.options
+          options: testCase.options,
         });
       });
     }
@@ -104,7 +102,7 @@ function test(testCases, runner, options) {
           value: value,
           expected: expected(i),
           error: testCase.error,
-          options: testCase.options
+          options: testCase.options,
         });
       });
 

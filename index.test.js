@@ -1,5 +1,4 @@
 /* eslint no-undefined: 0 */
-'use strict';
 
 var expect = require('chai').expect;
 var _it = it;
@@ -16,14 +15,14 @@ describe('mocha-cases', function () {
       expected: 14,
       runner: function (value) {
         return value * 2;
-      }
+      },
     }, {
       name: 'should handle exception',
       value: 'oops!',
       error: Error,
       runner: function (value) {
         throw new Error(value);
-      }
+      },
     }];
 
     test(cases);
@@ -35,14 +34,14 @@ describe('mocha-cases', function () {
       expected: 0,
       runner: function (value) {
         return value % 2;
-      }
+      },
     }, {
       name: 'should handle miltiple expected values each with corresponding expected values',
       values:   [3, 0, false, undefined, null, [], {}, ''],
       expected: [3, 0, false, undefined, null, [], {}, ''],
       runner: function echo(value) {
         return value;
-      }
+      },
     }];
 
     test(cases);
@@ -52,17 +51,17 @@ describe('mocha-cases', function () {
       name: 'should handle array of pairs \\{value: {value}, expected: {expected}\\}',
       cases: [{
         value: 2,
-        expected: 0
+        expected: 0,
       }, {
         value: 4,
-        expected: 0
+        expected: 0,
       }, {
         value: 3,
-        expected: 1
+        expected: 1,
       }],
       runner: function (value) {
         return value % 2;
-      }
+      },
     });
   });
   describe('dealing with multiple test cases as pairs of [value, expected]', function () {
@@ -71,11 +70,11 @@ describe('mocha-cases', function () {
       cases: [
         [2, 0],
         [4, 0],
-        [3, 1]
+        [3, 1],
       ],
       runner: function (value) {
         return value % 2;
-      }
+      },
     });
   });
   describe('dealing value interpolating', function () {
@@ -84,57 +83,57 @@ describe('mocha-cases', function () {
       value: 520,
       expected: null,
       options: {
-        expected: 'should resolve top level value: 520'
-      }
+        expected: 'should resolve top level value: 520',
+      },
     }, {
       name: 'should resolve nested value: {value.nested}',
       value: { nested: 1024 },
       expected: null,
       options: {
-        expected: 'should resolve nested value: 1024'
-      }
+        expected: 'should resolve nested value: 1024',
+      },
     }, {
       name: 'should not replace if value not resolved: {value.not.resolvable}',
       value: {},
       expected: null,
       options: {
-        expected: 'should not replace if value not resolved: {value.not.resolvable}'
-      }
+        expected: 'should not replace if value not resolved: {value.not.resolvable}',
+      },
     }, {
       name: 'should resolve top level expected value: {expected}',
       value: null,
       expected: 333,
       options: {
-        expected: 'should resolve top level expected value: 333'
-      }
+        expected: 'should resolve top level expected value: 333',
+      },
     }, {
       name: 'should resolve nested expected value: {expected.nested}',
       value: null,
       expected: { nested: 999 },
       options: {
-        expected: 'should resolve nested expected value: 999'
-      }
+        expected: 'should resolve nested expected value: 999',
+      },
     }, {
       name: 'should not replace if expected value not resolved: {expected.not.resolvable}',
       value: null,
       expected: {},
       options: {
-        expected: 'should not replace if expected value not resolved: {expected.not.resolvable}'
-      }
+        expected: 'should not replace if expected value not resolved: {expected.not.resolvable}',
+      },
     }, {
       name: 'should handle brace characters escaping with valid value interpolating: \\{{ value }\\} \\{{ value}\\} \\{{value }\\} \\{{value}\\}',
       value: 520,
       expected: {},
       options: {
-        expected: 'should handle brace characters escaping with valid value interpolating: {520} {520} {520} {520}'
-      }
+        expected: 'should handle brace characters escaping with valid value interpolating: {520} {520} {520} {520}',
+      },
     }, {
       name: 'should handle brace characters escaping with invalid value interpolating: \\{{value\\}} {\\{value}\\} {\\{value\\}} \\{value} {value\\} \\{\\} \\{} {\\} { \\} {\\ }',
       value: 520,
       expected: {},
       options: {
-        expected: 'should handle brace characters escaping with invalid value interpolating: {{value}} {{value}} {{value}} {value} {value} {} {} {} { } {\\ }'
-      }
+        expected: 'should handle brace characters escaping with invalid value interpolating: {{value}} {{value}} {{value}} {value} {value} {} {} {} { } {\\ }',
+      },
     }];
 
     cases.forEach(runTest);
@@ -147,7 +146,7 @@ describe('mocha-cases', function () {
           _it(actualName, function () {
             expect(actualName).to.equal(testCase.options.expected);
           });
-        }
+        },
       };
       test([testCase], options);
     }
@@ -161,7 +160,7 @@ describe('mocha-cases', function () {
       errback: false,
       runner: function resolved(value) {
         return Promise.resolve(value);
-      }
+      },
     }, {
       name: 'should eventually capture rejected result',
       value: 'rejected',
@@ -169,7 +168,7 @@ describe('mocha-cases', function () {
       errback: false,
       runner: function rejected() {
         return Promise.reject(new Error());
-      }
+      },
     }, {
       name: 'should eventually capture throw as rejected result',
       value: '',
@@ -179,7 +178,7 @@ describe('mocha-cases', function () {
         return new Promise(function () {
           throw new Error();
         });
-      }
+      },
     }];
 
     test(cases, { errback: true });
@@ -194,7 +193,7 @@ describe('mocha-cases', function () {
         process.nextTick(function () {
           done(null, value);
         });
-      }
+      },
     }, {
       name: 'should handle error result',
       value: 'the value',
@@ -203,7 +202,7 @@ describe('mocha-cases', function () {
         process.nextTick(function () {
           done('rejected');
         });
-      }
+      },
     }, {
       name: 'should handle error class',
       value: 'the value',
@@ -212,7 +211,7 @@ describe('mocha-cases', function () {
         process.nextTick(function () {
           done(errorInstance);
         });
-      }
+      },
     }, {
       name: 'should handle error instance',
       value: 'the value',
@@ -221,7 +220,7 @@ describe('mocha-cases', function () {
         process.nextTick(function () {
           done(errorInstance);
         });
-      }
+      },
     }];
 
     test(cases, { errback: true });
