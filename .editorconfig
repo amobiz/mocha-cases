@@ -3,10 +3,6 @@ root = true
 [*]
 end_of_line = lf
 
-[*.{js,json}]
-indent_style = space
-indent_size = 2
-
-[{.eslintrc,.jscsrc}]
+[*.{js,json,mjs}]
 indent_style = space
 indent_size = 2
